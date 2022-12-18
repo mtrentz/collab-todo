@@ -5,8 +5,7 @@ defmodule CollabTodoWeb.HomeLive do
   alias CollabTodo.Repo
 
   def mount(_params, _session, socket) do
-    counter = 0
-    {:ok, assign(socket, counter: counter)}
+    {:ok, socket}
   end
 
   def render(assigns) do
