@@ -1,8 +1,7 @@
 defmodule CollabTodoWeb.HomeLive do
   use Phoenix.LiveView
 
-  alias CollabTodo.Todo.Room
-  alias CollabTodo.Repo
+  alias CollabTodo.Todo
 
   def mount(_params, _session, socket) do
     {:ok, socket}
@@ -26,7 +25,8 @@ defmodule CollabTodoWeb.HomeLive do
   def handle_event("create_room", _params, socket) do
     phrase = MnemonicSlugs.generate_slug(5)
     # Usar create_room oualgo assim
-    Repo.insert!(%Room{phrase: phrase})
+    # Repo.insert!(%Room{phrase: phrase})
+    Todo.create_room(%{phrase: phrase})
     {:noreply, push_redirect(socket, to: "/room?phrase=#{phrase}")}
   end
 

@@ -17,9 +17,9 @@ defmodule CollabTodoWeb.Router do
   scope "/", CollabTodoWeb do
     pipe_through :browser
 
-    get "/", PageController, :index
+    # get "/", PageController, :index
 
-    live "/home", HomeLive
+    live "/", HomeLive
 
     live "/room", RoomLive
   end
