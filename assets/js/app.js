@@ -22,15 +22,15 @@ import "../css/app.css"
 // Include phoenix_html to handle method=PUT/DELETE in forms and buttons.
 import "phoenix_html"
 // Establish Phoenix Socket and LiveView configuration.
-import {Socket} from "phoenix"
-import {LiveSocket} from "phoenix_live_view"
+import { Socket, Presence } from "phoenix"
+import { LiveSocket } from "phoenix_live_view"
 import topbar from "../vendor/topbar"
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
-let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToken}})
+let liveSocket = new LiveSocket("/live", Socket, { params: { _csrf_token: csrfToken } })
 
 // Show progress bar on live navigation and form submits
-topbar.config({barColors: {0: "#29d"}, shadowColor: "rgba(0, 0, 0, .3)"})
+topbar.config({ barColors: { 0: "#29d" }, shadowColor: "rgba(0, 0, 0, .3)" })
 window.addEventListener("phx:page-loading-start", info => topbar.show())
 window.addEventListener("phx:page-loading-stop", info => topbar.hide())
 
@@ -43,3 +43,28 @@ liveSocket.connect()
 // >> liveSocket.disableLatencySim()
 window.liveSocket = liveSocket
 
+
+// Presence stuff
+
+let socket = new Socket("/socket", { params: { token: window.userToken } })
+
+let roomPhrase = window.location.search.split("=")[1]
+
+let channel = socket.channel("room:" + roomPhrase, {})
+let presence = new Presence(channel)
+
+function renderOnlineUsers(presence) {
+    console.log("here")
+    // Check if on a "correct page" first
+    if (document.querySelector("span[role=counter]")) {
+        counter = presence.list()[0].metas.length
+        document.querySelector("span[role=counter]").innerHTML = counter
+    }
+
+}
+
+socket.connect()
+
+presence.onSync(() => renderOnlineUsers(presence))
+
+channel.join()

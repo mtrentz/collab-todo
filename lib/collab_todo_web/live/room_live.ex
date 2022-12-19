@@ -19,6 +19,7 @@ defmodule CollabTodoWeb.RoomLive do
     <section class="container">
       <h1> Phrase: <%= @phrase %> </h1>
       <h2> ID: <%= @id %> </h2>
+      <h3> Amount of users here <span role="counter">1</span></h3>
 
       <div>
         <h1>Tasks</h1>

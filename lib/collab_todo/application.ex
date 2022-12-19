@@ -15,9 +15,10 @@ defmodule CollabTodo.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: CollabTodo.PubSub},
       # Start the Endpoint (http/https)
-      CollabTodoWeb.Endpoint
+      CollabTodoWeb.Endpoint,
       # Start a worker by calling: CollabTodo.Worker.start_link(arg)
       # {CollabTodo.Worker, arg}
+      CollabTodoWeb.Presence
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
