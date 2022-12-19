@@ -45,26 +45,29 @@ window.liveSocket = liveSocket
 
 
 // Presence stuff
-
 let socket = new Socket("/socket", { params: { token: window.userToken } })
 
-let roomPhrase = window.location.search.split("=")[1]
+window.addEventListener("phx:page-loading-stop", () => {
 
-let channel = socket.channel("room:" + roomPhrase, {})
-let presence = new Presence(channel)
 
-function renderOnlineUsers(presence) {
-    console.log("here")
-    // Check if on a "correct page" first
-    if (document.querySelector("span[role=counter]")) {
-        counter = presence.list()[0].metas.length
-        document.querySelector("span[role=counter]").innerHTML = counter
+    let roomPhrase = window.location.search.split("=")[1]
+
+    let channel = socket.channel("room:" + roomPhrase, {})
+    let presence = new Presence(channel)
+
+    function renderOnlineUsers(presence) {
+        // Check if on a "correct page" first
+        if (document.querySelector("span[role=counter]")) {
+            counter = presence.list()[0].metas.length
+            document.querySelector("span[role=counter]").innerHTML = counter
+        }
+
     }
 
-}
+    socket.connect()
 
-socket.connect()
+    presence.onSync(() => renderOnlineUsers(presence))
 
-presence.onSync(() => renderOnlineUsers(presence))
+    channel.join()
 
-channel.join()
+})
