@@ -44,30 +44,30 @@ liveSocket.connect()
 window.liveSocket = liveSocket
 
 
-// Presence stuff
-let socket = new Socket("/socket", { params: { token: window.userToken } })
+// // Presence stuff
+// let socket = new Socket("/socket", { params: { token: window.userToken } })
 
-window.addEventListener("phx:page-loading-stop", () => {
+// window.addEventListener("phx:page-loading-stop", () => {
 
 
-    let roomPhrase = window.location.search.split("=")[1]
+//     let roomPhrase = window.location.search.split("=")[1]
 
-    let channel = socket.channel("room:" + roomPhrase, {})
-    let presence = new Presence(channel)
+//     let channel = socket.channel("room:" + roomPhrase, {})
+//     let presence = new Presence(channel)
 
-    function renderOnlineUsers(presence) {
-        // Check if on a "correct page" first
-        if (document.querySelector("span[role=counter]")) {
-            counter = presence.list()[0].metas.length
-            document.querySelector("span[role=counter]").innerHTML = counter
-        }
+//     function renderOnlineUsers(presence) {
+//         // Check if on a "correct page" first
+//         if (document.querySelector("span[role=counter]")) {
+//             counter = presence.list()[0].metas.length
+//             document.querySelector("span[role=counter]").innerHTML = counter
+//         }
 
-    }
+//     }
 
-    socket.connect()
+//     socket.connect()
 
-    presence.onSync(() => renderOnlineUsers(presence))
+//     presence.onSync(() => renderOnlineUsers(presence))
 
-    channel.join()
+//     channel.join()
 
-})
+// })

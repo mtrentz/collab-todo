@@ -59,8 +59,10 @@ defmodule CollabTodo.Todo do
     Task.changeset(task, attrs)
   end
 
-  def subscribe(room_id) do
-    Phoenix.PubSub.subscribe(CollabTodo.PubSub, "room:#{room_id}")
+  def room_topic(room_id), do: "room:#{room_id}"
+
+  def subscribe(topic) do
+    Phoenix.PubSub.subscribe(CollabTodo.PubSub, topic)
   end
 
   defp broadcast({:error, _reason} = error, _event), do: error
@@ -70,10 +72,10 @@ defmodule CollabTodo.Todo do
     # pra mesma room
     case event do
       :task_created ->
-        Phoenix.PubSub.broadcast(CollabTodo.PubSub, "room:#{struct.room_id}", {event, struct})
+        Phoenix.PubSub.broadcast(CollabTodo.PubSub, room_topic(struct.room_id), {event, struct})
 
       :task_updated ->
-        Phoenix.PubSub.broadcast(CollabTodo.PubSub, "room:#{struct.room_id}", {event, struct})
+        Phoenix.PubSub.broadcast(CollabTodo.PubSub, room_topic(struct.room_id), {event, struct})
     end
 
     {:ok, struct}
