@@ -22,9 +22,9 @@ defmodule CollabTodo.NicknameGenerator do
   )
 
   def generate() do
-    adjective = @adjectives |> Enum.random()
-    noun = @nouns |> Enum.random()
+    adjective = @adjectives |> Enum.random() |> String.capitalize()
+    noun = @nouns |> Enum.random() |> String.capitalize()
 
-    [adjective, noun] |> Enum.join("-")
+    [adjective, noun] |> Enum.join(" ")
   end
 end

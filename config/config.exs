@@ -18,6 +18,17 @@ config :collab_todo, CollabTodoWeb.Endpoint,
   pubsub_server: CollabTodo.PubSub,
   live_view: [signing_salt: "1QFo406u"]
 
+config :tailwind,
+  version: "3.2.4",
+  default: [
+    args: ~w(
+      --config=tailwind.config.js
+      --input=css/app.css
+      --output=../priv/static/assets/app.css
+    ),
+    cd: Path.expand("../assets", __DIR__)
+  ]
+
 # Configures the mailer
 #
 # By default it uses the "Local" adapter which stores the emails

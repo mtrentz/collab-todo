@@ -1,6 +1,5 @@
 // We import the CSS which is extracted to its own file by esbuild.
 // Remove this line if you add a your own CSS build pipeline (e.g postcss).
-import "../css/app.css"
 
 // If you want to use Phoenix channels, run `mix help phx.gen.channel`
 // to get started and then uncomment the line below.
@@ -43,31 +42,3 @@ liveSocket.connect()
 // >> liveSocket.disableLatencySim()
 window.liveSocket = liveSocket
 
-
-// // Presence stuff
-// let socket = new Socket("/socket", { params: { token: window.userToken } })
-
-// window.addEventListener("phx:page-loading-stop", () => {
-
-
-//     let roomPhrase = window.location.search.split("=")[1]
-
-//     let channel = socket.channel("room:" + roomPhrase, {})
-//     let presence = new Presence(channel)
-
-//     function renderOnlineUsers(presence) {
-//         // Check if on a "correct page" first
-//         if (document.querySelector("span[role=counter]")) {
-//             counter = presence.list()[0].metas.length
-//             document.querySelector("span[role=counter]").innerHTML = counter
-//         }
-
-//     }
-
-//     socket.connect()
-
-//     presence.onSync(() => renderOnlineUsers(presence))
-
-//     channel.join()
-
-// })

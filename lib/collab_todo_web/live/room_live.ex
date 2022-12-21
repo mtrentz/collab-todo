@@ -15,9 +15,10 @@ defmodule CollabTodoWeb.RoomLive do
       Todo.subscribe(topic)
     end
 
-    # Short random name
-    random_name = NicknameGenerator.generate()
+    # Generate a random nickname
+    nickname = NicknameGenerator.generate()
 
+    # Get the name of users in the room and also their "nicknames"
     initial_count = Presence.list(topic) |> Enum.count()
 
     initial_names =
@@ -26,7 +27,7 @@ defmodule CollabTodoWeb.RoomLive do
       |> Enum.map(fn metas -> Enum.at(metas, 0)[:name] end)
 
     # Append self to list
-    names = initial_names ++ [random_name]
+    names = initial_names ++ [nickname]
 
     # Track changes to the topic
     Presence.track(
@@ -34,7 +35,7 @@ defmodule CollabTodoWeb.RoomLive do
       topic,
       socket.id,
       %{
-        name: random_name
+        name: nickname
       }
     )
 
@@ -44,50 +45,67 @@ defmodule CollabTodoWeb.RoomLive do
        id: room.id,
        tasks: tasks,
        count: initial_count,
+       nickname: nickname,
        names: names
      )}
   end
 
   def render(assigns) do
     ~H"""
-    <section class="container">
-      <h1> Phrase: <%= @phrase %> </h1>
-      <h2> ID: <%= @id %> </h2>
-      <h3> Amount of users here <span><%= @count %></span></h3>
-      <div>
-        <h1>Names</h1>
-        <ul>
-          <%= for name <- @names do %>
-            <li>
-              <%= name %>
-            </li>
-          <% end %>
-        </ul>
-      </div>
+    <section class="m-auto max-w-7xl p-2 flex flex-col justify-center items-center">
+      <h1 class="text-4xl font-bold"> Welcome <%= @nickname %> </h1>
+
+      <%= if length(@tasks) == 0 do %>
+        <h2 class="text-2xl font-bold"> Anything in your mind? </h2>
+      <% else %>
+        <h2 class="text-2xl font-bold"> Let's keep the progress going! </h2>
+      <% end %>
+
+      <%= if length(@names) > 1 do %>
+        <h3 class="text-lg font-semibold"> There are <%= @count %> users here: <span class="text-gray-700"> <%= concat_names(@names) %> </span> </h3>
+      <% end %>
+
+
 
       <div>
-        <h1>Tasks</h1>
         <ul>
           <%= for task <- @tasks do %>
-            <!-- Input checkbox for 'done' -->
-            <div class="row">
+            <div class="flex flex-row gap-2 items-center align-middle px-3 py-2 rounded-lg">
               <input type="checkbox" name="task_status" checked={task.done} phx-click="task_status" phx-value-task-id={task.id}>
+              <input type="text" class="border border-gray-300 text-gray-900 text-sm rounded-lg block w-full cursor-default w-96" value={task.text} disabled>
+              <button
+                  class="self-center cursor-pointer text-slate-600 w-5 h-5 mb-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                  </svg>
+              </button>
+          </div>
 
-              <li>
-                <%= task.text %>
-              </li>
-            </div>
           <% end %>
         </ul>
       </div>
 
       <form phx-submit="create_task">
-        <label for="task"> Create task </label>
-        <input type="text" id="task" name="task">
-        <button type="submit" value="task">Create</button>
+        <label for="task" class="sr-only">Create Task</label>
+        <div class="flex items-center p-2 rounded-lg bg-gray-100 w-96">
+            <input id="task" name="task"
+                class="block mx-4 my-2 p-2 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300"
+                placeholder="Your next task..."/>
+            <button type="submit" value="task"
+                class="inline-flex justify-center pr-2 text-blue-600 rounded-full cursor-pointer hover:text-blue-700 hover:stroke-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
+                </svg>
+                <span class="sr-only">Send message</span>
+            </button>
+        </div>
       </form>
     </section>
     """
+  end
+
+  def concat_names(names) do
+    Enum.join(names, ", ")
   end
 
   # Listen to events
@@ -113,7 +131,6 @@ defmodule CollabTodoWeb.RoomLive do
     {:noreply, assign(socket, count: count, names: names)}
   end
 
-  # Precis odo room id
   def handle_event("create_task", %{"task" => text}, socket) do
     Todo.create_task(%{text: text, done: false, room_id: socket.assigns.id})
     {:noreply, socket}
