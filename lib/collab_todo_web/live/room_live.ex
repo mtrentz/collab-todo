@@ -3,6 +3,7 @@ defmodule CollabTodoWeb.RoomLive do
 
   alias CollabTodo.Todo
   alias CollabTodoWeb.Presence
+  alias CollabTodo.NicknameGenerator
 
   def mount(%{"phrase" => phrase}, _session, socket) do
     room = Todo.get_room_by_phrase!(phrase)
@@ -15,7 +16,7 @@ defmodule CollabTodoWeb.RoomLive do
     end
 
     # Short random name
-    random_name = MnemonicSlugs.generate_slug(2)
+    random_name = NicknameGenerator.generate()
 
     initial_count = Presence.list(topic) |> Enum.count()
 
