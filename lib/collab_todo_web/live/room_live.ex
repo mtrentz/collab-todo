@@ -5,6 +5,9 @@ defmodule CollabTodoWeb.RoomLive do
   alias CollabTodoWeb.Presence
   alias CollabTodo.NicknameGenerator
 
+  # TODO: Alert com os updates?
+  # TODO: Live chat pra sala
+
   def mount(%{"phrase" => phrase}, _session, socket) do
     room = Todo.get_room_by_phrase!(phrase)
     tasks = Todo.get_tasks_by_room!(room.id)
@@ -74,7 +77,9 @@ defmodule CollabTodoWeb.RoomLive do
               <input type="checkbox" name="task_status" checked={task.done} phx-click="task_status" phx-value-task-id={task.id}>
               <input type="text" class="border border-gray-300 text-gray-900 text-sm rounded-lg block w-full cursor-default w-96" value={task.text} disabled>
               <button
-                  class="self-center cursor-pointer text-slate-600 w-5 h-5 mb-2">
+                  class="self-center cursor-pointer text-slate-600 w-5 h-5 mb-2"
+                  phx-click="delete_task" phx-value-task-id={task.id}
+                >
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
                   </svg>
@@ -119,6 +124,12 @@ defmodule CollabTodoWeb.RoomLive do
     {:noreply, assign(socket, tasks: updated_tasks)}
   end
 
+  def handle_info({:task_deleted, task}, socket) do
+    tasks = socket.assigns.tasks
+    updated_tasks = Enum.reject(tasks, fn t -> t.id == task.id end)
+    {:noreply, assign(socket, tasks: updated_tasks)}
+  end
+
   # Listen for presence events
   def handle_info(%{event: "presence_diff", payload: _payload}, socket) do
     count = Presence.list(Todo.room_topic(socket.assigns.id)) |> Enum.count()
@@ -145,6 +156,13 @@ defmodule CollabTodoWeb.RoomLive do
     task = Todo.get_task!(task_id)
     Todo.update_task(task, %{id: task_id, done: done})
 
+    {:noreply, socket}
+  end
+
+  def handle_event("delete_task", params, socket) do
+    task_id = params["task-id"]
+    task = Todo.get_task!(task_id)
+    Todo.delete_task(task)
     {:noreply, socket}
   end
 end

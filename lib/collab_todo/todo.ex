@@ -52,7 +52,9 @@ defmodule CollabTodo.Todo do
   end
 
   def delete_task(%Task{} = task) do
-    Repo.delete(task)
+    task
+    |> Repo.delete()
+    |> broadcast(:task_deleted)
   end
 
   def change_task(%Task{} = task, attrs \\ %{}) do
@@ -68,15 +70,7 @@ defmodule CollabTodo.Todo do
   defp broadcast({:error, _reason} = error, _event), do: error
 
   defp broadcast({:ok, struct}, event) do
-    # Aqui to separando task_created e updated, mas por enquanto não teria pq, visto q é tudo
-    # pra mesma room
-    case event do
-      :task_created ->
-        Phoenix.PubSub.broadcast(CollabTodo.PubSub, room_topic(struct.room_id), {event, struct})
-
-      :task_updated ->
-        Phoenix.PubSub.broadcast(CollabTodo.PubSub, room_topic(struct.room_id), {event, struct})
-    end
+    Phoenix.PubSub.broadcast(CollabTodo.PubSub, room_topic(struct.room_id), {event, struct})
 
     {:ok, struct}
   end
