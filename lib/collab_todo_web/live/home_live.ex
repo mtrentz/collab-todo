@@ -9,21 +9,27 @@ defmodule CollabTodoWeb.HomeLive do
 
   def render(assigns) do
     ~H"""
+
+    <.live_component module={NavComponent} id="nav" />
+
     <section class="m-auto px-4 max-w-7xl p-2 flex flex-col justify-center items-center">
 
-      <h1 class="my-2 text-4xl font-bold text-center"> Welcome to Collab To-Do </h1>
+      <div class="flex flex-col md:flex-row items-center justify-center align-middle gap-2">
+        <h1 class="text-4xl font-bold text-center"> Welcome to</h1>
+        <h1 class="text-4xl font-bold text-center text-orange-600"> Collab To-Do's </h1>
+      </div>
 
       <h2 class="my-2 text-2xl font-bold text-center"> Create a random room for your tasks </h2>
 
-      <button phx-click="create_room" class="flex w-64 my-4 justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-          Create new To-Do
+      <button phx-click="create_room" class="flex w-64 my-4 justify-center rounded-md border border-transparent bg-orange-600 py-2 px-4 text-sm font-medium text-white hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2">
+          Start a new To-Do
       </button>
 
       <h2 class="my-2 text-2xl font-bold text-center"> Or join an existing one </h2>
 
       <form phx-submit="join_room" class="flex flex-col align-middle justify-center">
         <input type="text" id="room" name="room" class="border border-gray-300 text-gray-900 text-sm rounded-lg block w-full w-96" placeholder="Room phrase">
-        <button type="submit" value="room" phx-click="create_room" class="self-center flex w-64 my-4 justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+        <button type="submit" value="room" phx-click="create_room" class="self-center flex w-64 my-4 justify-center rounded-md border border-transparent bg-orange-600 py-2 px-4 text-sm font-medium text-white hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2">
           Join
        </button>
       </form>
