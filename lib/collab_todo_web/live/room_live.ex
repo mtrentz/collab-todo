@@ -55,22 +55,22 @@ defmodule CollabTodoWeb.RoomLive do
 
   def render(assigns) do
     ~H"""
-    <section class="m-auto max-w-7xl p-2 flex flex-col justify-center items-center">
-      <h1 class="text-4xl font-bold"> Welcome <%= @nickname %> </h1>
+    <section class="m-auto px-4 max-w-7xl p-2 flex flex-col justify-center items-center">
+      <h1 class="text-4xl font-bold text-center"> Welcome <%= @nickname %> </h1>
 
       <%= if length(@tasks) == 0 do %>
-        <h2 class="text-2xl font-bold"> Anything in your mind? </h2>
+        <h2 class="text-2xl font-bold text-center"> Anything in your mind? </h2>
       <% else %>
-        <h2 class="text-2xl font-bold"> Let's keep the progress going! </h2>
+        <h2 class="text-2xl font-bold text-center"> Let's keep the progress going! </h2>
       <% end %>
 
       <%= if length(@names) > 1 do %>
-        <h3 class="text-lg font-semibold"> There are <%= @count %> users here: <span class="text-gray-700"> <%= concat_names(@names) %> </span> </h3>
+        <h3 class="text-lg font-semibold text-center"> There are <%= @count %> users here: <span class="text-gray-700"> <%= concat_names(@names) %> </span> </h3>
       <% end %>
 
 
 
-      <div>
+      <div class="my-4">
         <ul>
           <%= for task <- @tasks do %>
             <div class="flex flex-row gap-2 items-center align-middle px-3 py-2 rounded-lg">
@@ -90,7 +90,7 @@ defmodule CollabTodoWeb.RoomLive do
         </ul>
       </div>
 
-      <form phx-submit="create_task">
+      <form phx-submit="create_task" class="my-4">
         <label for="task" class="sr-only">Create Task</label>
         <div class="flex items-center p-2 rounded-lg bg-gray-100 w-96">
             <input id="task" name="task"
