@@ -1,4 +1,5 @@
-phoenix.env
+Dockerfile
+docker-compose.yml
 
 # The directory Mix will write compiled artifacts to.
 /_build/

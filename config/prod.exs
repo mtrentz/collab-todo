@@ -14,6 +14,8 @@ config :collab_todo, CollabTodoWeb.Endpoint, cache_static_manifest: "priv/static
 # Do not print debug messages in production
 config :logger, level: :info
 
+config :check_origin ["http://localhost:4000", "http://localhost:4001"]
+
 # ## SSL Support
 #
 # To get SSL working, you will need to add the `https` key
