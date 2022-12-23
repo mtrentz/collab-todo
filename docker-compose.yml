@@ -26,6 +26,9 @@ services:
       POSTGRES_PASSWORD: postgres
       # Set a path where Postgres should store the data.
       PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      # Mapping the port to make the DB accessible outside of the container.
+      - '5432:5432'
     restart: always
     volumes:
       - pgdata:/var/lib/postgresql/data

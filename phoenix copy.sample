@@ -1,0 +1,7 @@
+SECRET_KEY_BASE=
+DATABASE_URL=ecto://postgres:postgres@todo_db/collab_todo
+PGHOST=todo_db
+PGPORT=5432
+PGUSER=postgres
+PGPASSWORD=postgres
+PGDATABASE=collab_todo

@@ -18,6 +18,9 @@ config :collab_todo, CollabTodoWeb.Endpoint,
   pubsub_server: CollabTodo.PubSub,
   live_view: [signing_salt: "1QFo406u"]
 
+# Config UserSocket
+config :collab_todo, CollabTodoWeb.UserSocket, url: [host: "localhost", port: 4001]
+
 config :tailwind,
   version: "3.2.4",
   default: [
