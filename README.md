@@ -1,19 +1,17 @@
-# CollabTodo
+# Collab-Todo
 
-To start your Phoenix server:
+A very simple real-time collaborative todo list app built with Phoenix in Elixir.
 
-  * Install dependencies with `mix deps.get`
-  * Create and migrate your database with `mix ecto.setup`
-  * Start Phoenix endpoint with `mix phx.server` or inside IEx with `iex -S mix phx.server`
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+Try it live at [at my website](https://collab-todo.mtrentz.com.br/).
 
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
+![Collab-Todo](./collab-todo.png)
 
-## Learn more
 
-  * Official website: https://www.phoenixframework.org/
-  * Guides: https://hexdocs.pm/phoenix/overview.html
-  * Docs: https://hexdocs.pm/phoenix
-  * Forum: https://elixirforum.com/c/phoenix-forum
-  * Source: https://github.com/phoenixframework/phoenix
+# Installation
+Set the secrets on a file called `phoenix.env` and then run it with docker:
+
+```
+docker-compose build
+docker-compose up
+```
