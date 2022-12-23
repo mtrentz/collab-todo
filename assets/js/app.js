@@ -60,3 +60,13 @@ liveSocket.connect()
 // >> liveSocket.disableLatencySim()
 window.liveSocket = liveSocket
 
+
+// Function for copy to clipboard
+window.addEventListener("collab-todo:clipcopy", (event) => {
+    if ("clipboard" in navigator) {
+        const text = event.target.textContent;
+        navigator.clipboard.writeText(text);
+    } else {
+        alert("Sorry, your browser does not support clipboard copy.");
+    }
+});
