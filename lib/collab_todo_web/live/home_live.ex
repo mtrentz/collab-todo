@@ -48,7 +48,6 @@ defmodule CollabTodoWeb.HomeLive do
 
   # Join existing room
   def handle_event("join_room", %{"room" => phrase}, socket) do
-    IO.inspect(phrase, label: "room-phrase")
     {:noreply, push_redirect(socket, to: "/room?phrase=#{phrase}")}
   end
 end
