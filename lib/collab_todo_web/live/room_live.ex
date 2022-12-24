@@ -10,6 +10,8 @@ defmodule CollabTodoWeb.RoomLive do
   # TODO: Live chat pra sala
 
   def mount(%{"phrase" => phrase}, _session, socket) do
+    IO.inspect(phrase, label: "phrase")
+
     room = Todo.get_room_by_phrase!(phrase)
     tasks = Todo.get_tasks_by_room!(room.id)
 

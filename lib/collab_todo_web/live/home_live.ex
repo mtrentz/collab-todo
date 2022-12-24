@@ -29,7 +29,7 @@ defmodule CollabTodoWeb.HomeLive do
 
       <form phx-submit="join_room" class="flex flex-col align-middle justify-center">
         <input type="text" id="room" name="room" class="border border-gray-300 text-gray-900 text-sm rounded-lg block w-full w-96" placeholder="Room phrase">
-        <button type="submit" value="room" phx-click="create_room" class="self-center flex w-64 my-4 justify-center rounded-md border border-transparent bg-orange-600 py-2 px-4 text-sm font-medium text-white hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2">
+        <button type="submit" value="room" class="self-center flex w-64 my-4 justify-center rounded-md border border-transparent bg-orange-600 py-2 px-4 text-sm font-medium text-white hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2">
           Join
        </button>
       </form>
@@ -48,6 +48,7 @@ defmodule CollabTodoWeb.HomeLive do
 
   # Join existing room
   def handle_event("join_room", %{"room" => phrase}, socket) do
+    IO.inspect(phrase, label: "room-phrase")
     {:noreply, push_redirect(socket, to: "/room?phrase=#{phrase}")}
   end
 end
